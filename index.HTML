@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vitrea Advanced Visualization V7.16.x - Technical Training</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --canon-red: #c8102e;
+            --canon-darkred: #9a0c23;
+            --canon-lightred: #f9e6e8;
+            --canon-gray: #5a6a7a;
+            --canon-lightgray: #f5f7f9;
+            --highlight: #ffd700;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --transition: all 0.3s ease;
+            --thailand: #d32f2f;
+            --brazil: #2e7d32;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding-bottom: 50px;
+        }
+        
+        .header-container {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        header {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+        }
+        
+        .logo img {
+            height: 45px;
+        }
+        
+        .main-title {
+            background: linear-gradient(135deg, var(--canon-red) 0%, var(--canon-darkred) 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .main-title::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 90% 10%, rgba(255,255,255,0.1) 0%, transparent 20%),
+                radial-gradient(circle at 10% 90%, rgba(255,255,255,0.1) 0%, transparent 20%);
+        }
+        
+        .main-title h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .main-title .subtitle {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px 25px;
+            min-width: 180px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.25);
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .executive-summary {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            padding: 35px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .executive-summary::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--canon-lightred) 0%, rgba(249,230,232,0) 100%);
+            z-index: 0;
+        }
+        
+        .executive-summary h2 {
+            color: var(--canon-red);
+            margin-bottom: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--canon-red);
+            transition: var(--transition);
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .summary-card h3 {
+            color: var(--canon-red);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .summary-card h3 i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .summary-card ul {
+            padding-left: 20px;
+        }
+        
+        .summary-card li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .feedback-section {
+            background: var(--canon-lightgray);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 4px solid var(--canon-gray);
+        }
+        
+        .feedback-section h3 {
+            color: var(--canon-gray);
+            margin-bottom: 15px;
+        }
+        
+        .feedback-quotes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .quote-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            flex: 1;
+            min-width: 250px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .quote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .quote-card::before {
+            content: """;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 4rem;
+            color: var(--canon-lightred);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+        
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 15px;
+            padding-left: 30px;
+        }
+        
+        .quote-author {
+            font-weight: 600;
+            color: var(--canon-gray);
+            text-align: right;
+            padding-left: 30px;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--canon-lightred);
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px 10px 0 0;
+            padding: 5px 10px 0;
+        }
+        
+        .tab {
+            padding: 12px 25px;
+            cursor: pointer;
+            background-color: white;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            margin-right: 5px;
+            font-weight: bold;
+            transition: var(--transition);
+            color: var(--canon-gray);
+            white-space: nowrap;
+            border: 1px solid var(--canon-lightred);
+            border-bottom: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tab i {
+            margin-right: 8px;
+        }
+        
+        .tab.active {
+            background-color: var(--canon-red);
+            color: white;
+            border-color: var(--canon-red);
+        }
+        
+        .tab:hover:not(.active) {
+            background-color: var(--canon-lightred);
+            color: var(--canon-red);
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 35px;
+            background-color: white;
+            border-radius: 0 12px 12px 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            animation: fadeIn 0.5s;
+            margin-bottom: 40px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .day-content h2 {
+            color: var(--canon-red);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .day-content h2 i {
+            margin-right: 12px;
+            font-size: 1.4em;
+        }
+        
+        .agenda-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .agenda-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--canon-red);
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .agenda-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .agenda-card h3 {
+            color: var(--canon-red);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .agenda-card h3 i {
+            margin-right: 10px;
+            font-size: 1.1em;
+        }
+        
+        .agenda-card ul {
+            padding-left: 20px;
+        }
+        
+        .agenda-card li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
+        .tools-section {
+            background: var(--canon-lightgray);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .tool-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .tool-icon {
+            font-size: 2.5rem;
+            color: var(--canon-red);
+            margin-bottom: 15px;
+        }
+        
+        .tool-card h4 {
+            color: var(--canon-red);
+            margin-bottom: 10px;
+        }
+        
+        .certification-banner {
+            background: linear-gradient(135deg, var(--canon-red) 0%, var(--canon-darkred) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .certification-banner h2 {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .certification-banner p {
+            max-width: 700px;
+            margin: 0 auto 25px;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn {
+            background: white;
+            color: var(--canon-red);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: var(--canon-lightred);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--canon-gray);
+            font-size: 0.9rem;
+        }
+        
+        .impact-section {
+            background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
+        .impact-section h2 {
+            margin-bottom: 30px;
+        }
+        
+        .impact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+        
+        .impact-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        
+        .impact-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .impact-card h3 {
+            margin-bottom: 15px;
+            color: var(--highlight);
+        }
+        
+        .impact-card p {
+            font-size: 1.1rem;
+        }
+        
+        /* NEW STYLES FOR STATISTICS AND FEEDBACK */
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .data-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--canon-red);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .metric {
+            font-size: 2.2em;
+            font-weight: bold;
+            color: var(--canon-red);
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .metric-icon {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .metric-label {
+            color: var(--canon-gray);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .highlight {
+            background-color: rgba(255, 215, 0, 0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: var(--canon-darkred);
+        }
+        
+        .analysis-section {
+            background-color: var(--canon-lightgray);
+            padding: 25px;
+            border-radius: 8px;
+            margin: 30px 0;
+            border-left: 4px solid var(--canon-red);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .comparison-table th {
+            background-color: var(--canon-red);
+            color: white;
+            padding: 15px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--canon-lightgray);
+        }
+        
+        .comparison-table tr:hover {
+            background-color: rgba(237, 28, 36, 0.05);
+        }
+        
+        .strength-card {
+            background-color: rgba(76, 175, 80, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--success);
+        }
+        
+        .opportunity-card {
+            background-color: rgba(255, 152, 0, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .expand-btn {
+            background-color: var(--canon-red);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+        
+        .expand-btn:hover {
+            background-color: var(--canon-darkred);
+        }
+        
+        .expand-btn i {
+            margin-left: 8px;
+            transition: transform 0.3s;
+        }
+        
+        .expand-btn.active i {
+            transform: rotate(180deg);
+        }
+        
+        .expand-content {
+            display: none;
+            padding: 20px;
+            background-color: white;
+            border-radius: 5px;
+            margin-top: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+        
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .use-case-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--canon-red);
+        }
+        
+        .use-case-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .use-case-card h3 {
+            color: var(--canon-red);
+            margin-top: 0;
+        }
+        
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dotted var(--canon-red);
+            cursor: help;
+        }
+        
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: var(--canon-gray);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.9em;
+            font-weight: normal;
+        }
+        
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .map-container {
+            height: 400px;
+            width: 100%;
+            margin: 30px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            position: relative;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-color: #f5f7f9;
+        }
+        
+        .map-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--canon-red);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 0 0 rgba(237, 28, 36, 0.7);
+        }
+        
+        .map-dot:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            box-shadow: 0 0 0 4px rgba(237, 28, 36, 0.3);
+        }
+        
+        .map-dot::after {
+            content: attr(data-count);
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--canon-darkred);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            white-space: nowrap;
+        }
+        
+        .map-dot:hover::after {
+            opacity: 1;
+        }
+        
+        .counter {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--canon-red);
+            transition: all 0.5s ease-out;
+        }
+        
+        .counter-label {
+            font-size: 0.9em;
+            color: var(--canon-gray);
+        }
+        
+        .dynamic-stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            background: var(--canon-lightgray);
+            padding: 20px;
+            border-radius: 8px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            min-width: 150px;
+        }
+        
+        .year-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .thailand-badge {
+            background: var(--thailand);
+        }
+        
+        .brazil-badge {
+            background: var(--brazil);
+        }
+        
+        .testimonial-author-extended {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+        }
+        
+        .author-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .thailand-avatar {
+            background: linear-gradient(135deg, var(--thailand), #b71c1c);
+        }
+        
+        .brazil-avatar {
+            background: linear-gradient(135deg, var(--brazil), #1b5e20);
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--canon-gray);
+        }
+        
+        .author-company {
+            color: var(--canon-gray);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .rating {
+            display: flex;
+            margin-top: 8px;
+        }
+        
+        .rating i {
+            color: #FFD700;
+            margin-right: 2px;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .main-title h1 {
+                font-size: 2.2rem;
+            }
+            
+            .main-title .subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .stat-card {
+                min-width: 140px;
+                padding: 12px 15px;
+            }
+            
+            .stat-value {
+                font-size: 1.8rem;
+            }
+            
+            .tab {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .tab-content {
+                padding: 25px 20px;
+            }
+            
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .use-case-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .metric {
+                font-size: 1.8em;
+            }
+            
+            .dynamic-stats {
+                flex-direction: column;
+            }
+            
+            .map-container {
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .main-title h1 {
+                font-size: 1.8rem;
+            }
+            
+            .stats-container {
+                gap: 10px;
+            }
+            
+            .stat-card {
+                min-width: calc(50% - 10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <header>
+            <div class="logo">
+                <img src=https://global.canon/en/corporate/logo/img/logo_01.png alt="Canon Medical Logo" class="logo">
+            </div>
+            <nav>
+                <button class="btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                    <i class="fas fa-arrow-up"></i> Back to Top
+                </button>
+            </nav>
+        </header>
+    </div>
+
+    <div class="main-title">
+        <h1>Vitrea Advanced Visualization V7.16.x</h1>
+        <div class="subtitle">
+            Technical Training for Partners, Engineers & Support Teams
+        </div>
+        <div class="subtitle">
+            <strong>3-Day Intensive Hands-on Training | September 30 - October 2, 2025</strong>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value">3</div>
+                <div class="stat-label">Days</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">16+</div>
+                <div class="stat-label">Modules</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12+</div>
+                <div class="stat-label">Hands-on Labs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">40%</div>
+                <div class="stat-label">Reduction in Support Escalations*</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="executive-summary">
+            <h2><i class="fas fa-file-contract"></i> Executive Summary & Training Value</h2>
+            
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <h3><i class="fas fa-bullseye"></i> Training Goals</h3>
+                    <p>This intensive 3-day program empowers Canon partners, engineers, and technical support teams with comprehensive skills to deploy, support, and manage Vitrea AV Enterprise V7.16.x solutions.</p>
+                    <ul>
+                        <li>Master new deployment models (Enterprise, Hybrid Cloud, Thin Client)</li>
+                        <li>Gain hands-on experience with installation, configuration, and troubleshooting</li>
+                        <li>Understand compliance and cybersecurity requirements</li>
+                        <li>Learn to leverage new features and architectural enhancements</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3><i class="fas fa-chart-line"></i> Business Impact</h3>
+                    <ul>
+                        <li>Reduce technical escalations by up to 40%</li>
+                        <li>Accelerate customer onboarding by 30%</li>
+                        <li>Improve first-call resolution rates</li>
+                        <li>Enhance tender response quality and speed</li>
+                        <li>Increase customer satisfaction and retention</li>
+                    </ul>
+                </div>
+                
+                <div class="summary-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Certification Benefits</h3>
+                    <ul>
+                        <li>Official Canon Technical Certification</li>
+                        <li>Access to exclusive deployment resources</li>
+                        <li>Priority technical support access</li>
+                        <li>Listing in Canon's Certified Partner Directory</li>
+                        <li>Early access to new releases and updates</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="feedback-section">
+                <h3><i class="fas fa-comments"></i> What Past Attendees Say</h3>
+                <div class="feedback-quotes">
+                    <div class="quote-card">
+                        <div class="quote-text">"I can now walk into any customer site and deploy AV with confidence."</div>
+                        <div class="quote-author">- Senior Field Engineer</div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="quote-text">"We reduced support escalations by 40% after our engineers were certified."</div>
+                        <div class="quote-author">- Technical Support Manager</div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="quote-text">"Tender responses are now faster and more complete with reference info from training."</div>
+                        <div class="quote-author">- Solutions Architect</div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2023</div>
+                        <div class="quote-text">"Great and the AWS deployment is something we never expected. Because nowadays all infra are moving to cloud so the new deployment really worth and was a great experience to me as well."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">DD</div>
+                            <div class="author-info">
+                                <div class="author-name">D Devaranjan</div>
+                                <div class="author-company">Mediquipment Ltd</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="quote-card">
+                        <div class="year-badge brazil-badge">Brazil 2023</div>
+                        <div class="quote-text">"Thank you very much, it was a great Training Session. The materials are really good, and extending the training days would make it even better."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar brazil-avatar">JC</div>
+                            <div class="author-info">
+                                <div class="author-name">Jorge Castellanos</div>
+                                <div class="author-company">Seijiro Yazawa Iwai</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="impact-section">
+            <h2><i class="fas fa-chart-bar"></i> Measurable Training Impact</h2>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <h3>40% Reduction</h3>
+                    <p>in technical support escalations</p>
+                </div>
+                <div class="impact-card">
+                    <h3>30% Faster</h3>
+                    <p>customer onboarding process</p>
+                </div>
+                <div class="impact-card">
+                    <h3>95% Success</h3>
+                    <p>rate for first-time deployments</p>
+                </div>
+                <div class="impact-card">
+                    <h3>50% Faster</h3>
+                    <p>tender response preparation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tab-container">
+            <button class="tab active" onclick="openTab(event, 'outcomes')">
+                <i class="fas fa-trophy"></i> Learning Outcomes
+            </button>
+            <button class="tab" onclick="openTab(event, 'day1')">
+                <i class="fas fa-calendar-day"></i> Day 1
+            </button>
+            <button class="tab" onclick="openTab(event, 'day2')">
+                <i class="fas fa-calendar-day"></i> Day 2
+            </button>
+            <button class="tab" onclick="openTab(event, 'day3')">
+                <i class="fas fa-calendar-day"></i> Day 3
+            </button>
+            <button class="tab" onclick="openTab(event, 'resources')">
+                <i class="fas fa-tools"></i> Training Resources
+            </button>
+            <button class="tab" onclick="openTab(event, 'performance')">
+                <i class="fas fa-chart-line"></i> Performance & Statistics
+            </button>
+            <button class="tab" onclick="openTab(event, 'testimonials')">
+                <i class="fas fa-comments"></i> Global Feedback
+            </button>
+        </div>
+
+        <div id="outcomes" class="tab-content active">
+            <div class="day-content">
+                <h2><i class="fas fa-trophy"></i> Learning Outcomes & Skills Development</h2>
+                <p>Upon completion of this training, attendees will be able to:</p>
+                
+                <div class="agenda-grid">
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-archway"></i> Architecture Mastery</h3>
+                        <ul>
+                            <li>Understand Vitrea AV V7.16.x technical architecture</li>
+                            <li>Deploy Enterprise, Single Server, and Hybrid Cloud setups</li>
+                            <li>Configure Thin Client solutions</li>
+                            <li>Optimize system performance based on hardware specs</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-wrench"></i> Deployment Expertise</h3>
+                        <ul>
+                            <li>Perform end-to-end installation and configuration</li>
+                            <li>Implement PACS integration workflows</li>
+                            <li>Set up modality connectivity</li>
+                            <li>Manage licensing and compliance requirements</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-bug"></i> Troubleshooting Skills</h3>
+                        <ul>
+                            <li>Apply Root Cause Analysis (RCA) methodologies</li>
+                            <li>Resolve common deployment and operational issues</li>
+                            <li>Interpret system logs and diagnostics</li>
+                            <li>Implement preventive maintenance strategies</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-shield-alt"></i> Security & Compliance</h3>
+                        <ul>
+                            <li>Implement cybersecurity best practices</li>
+                            <li>Apply system hardening techniques</li>
+                            <li>Ensure compliance with IHE and DICOM standards</li>
+                            <li>Manage security patches and updates</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="tools-section">
+                    <h3><i class="fas fa-lightbulb"></i> What's New in V7.16.x</h3>
+                    <p>Attendees will master the latest enhancements in Vitrea Advanced Visualization:</p>
+                    <div class="agenda-grid">
+                        <div class="agenda-card">
+                            <h3><i class="fas fa-star"></i> New Features</h3>
+                            <ul>
+                                <li>Enhanced rendering algorithms</li>
+                                <li>Streamlined workflow automation</li>
+                                <li>Improved thin client performance</li>
+                                <li>Expanded modality support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="agenda-card">
+                            <h3><i class="fas fa-clipboard-check"></i> Release Notes</h3>
+                            <ul>
+                                <li>Clinical feature enhancements</li>
+                                <li>Technical performance improvements</li>
+                                <li>Addressed feature requests</li>
+                                <li>Bug resolutions and optimizations</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="agenda-card">
+                            <h3><i class="fas fa-project-diagram"></i> Architecture Updates</h3>
+                            <ul>
+                                <li>Hybrid cloud deployment options</li>
+                                <li>Enhanced security protocols</li>
+                                <li>Resource optimization techniques</li>
+                                <li>Lifecycle management guidance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="day1" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-calendar-day"></i> Day 1: September 30, 2025 (Tuesday)</h2>
+                
+                <div class="agenda-grid">
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-book-open"></i> Introduction & Foundation</h3>
+                        <ul>
+                            <li>Canon HIT ecosystem overview</li>
+                            <li>Vitrea AV product positioning</li>
+                            <li>Training objectives and agenda</li>
+                            <li>AWS lab environment setup</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-cube"></i> Product Deep Dive (Part 1)</h3>
+                        <ul>
+                            <li>Vitrea AV V7.x architecture</li>
+                            <li>Solution delivery methodology</li>
+                            <li>Deployment options comparison</li>
+                            <li>Hardware specifications and EOL guidance</li>
+                            <li>Enterprise Single Server (ESS) configuration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-cubes"></i> Product Deep Dive (Part 2)</h3>
+                        <ul>
+                            <li>Clinical application packages overview</li>
+                            <li>Global Illumination, MMV, CT, MR workflows</li>
+                            <li>V7.16.x new features and enhancements</li>
+                            <li>Vina Analytics integration</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-laptop-code"></i> Hands-on Session</h3>
+                        <ul>
+                            <li>Lab environment preparation</li>
+                            <li>Enterprise Single Server installation</li>
+                            <li>Basic system configuration</li>
+                            <li>Initial validation testing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="day2" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-calendar-day"></i> Day 2: October 1, 2025 (Wednesday)</h2>
+                
+                <div class="agenda-grid">
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-sitemap"></i> Technical Architecture</h3>
+                        <ul>
+                            <li>Component interaction analysis</li>
+                            <li>Vitrea Service Platform (VSP) deep dive</li>
+                            <li>Data processing workflows</li>
+                            <li>Resource allocation best practices</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-briefcase"></i> Real-world Case Study</h3>
+                        <ul>
+                            <li>Analysis of successful deployment</li>
+                            <li>Hardware BoM selection process</li>
+                            <li>Performance optimization techniques</li>
+                            <li>Lessons learned and best practices</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-plug"></i> PACS Integration</h3>
+                        <ul>
+                            <li>Integration methodologies</li>
+                            <li>Workflow configuration</li>
+                            <li>DICOM communication setup</li>
+                            <li>Troubleshooting common issues</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-laptop-code"></i> Advanced Hands-on Lab</h3>
+                        <ul>
+                            <li>Enterprise deployment configuration</li>
+                            <li>DICOM services setup</li>
+                            <li>User and group management</li>
+                            <li>Thin client installation</li>
+                            <li>Workflow validation testing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="day3" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-calendar-day"></i> Day 3: October 2, 2025 (Thursday)</h2>
+                
+                <div class="agenda-grid">
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-user-cog"></i> Administration & Operations</h3>
+                        <ul>
+                            <li>Daily maintenance procedures</li>
+                            <li>User management best practices</li>
+                            <li>Backup and recovery strategies</li>
+                            <li>Performance monitoring</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-shield-alt"></i> Cybersecurity</h3>
+                        <ul>
+                            <li>Security bulletin implementation</li>
+                            <li>System hardening techniques</li>
+                            <li>Patch management workflow</li>
+                            <li>Compliance documentation</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-sync-alt"></i> System Maintenance</h3>
+                        <ul>
+                            <li>Reinstallation procedures</li>
+                            <li>Version upgrade process</li>
+                            <li>Migration strategies</li>
+                            <li>Disaster recovery planning</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-graduation-cap"></i> Certification & Wrap-up</h3>
+                        <ul>
+                            <li>Study material review</li>
+                            <li>Knowledge assessment</li>
+                            <li>Certification exam</li>
+                            <li>Training feedback session</li>
+                            <li>Next steps and resources</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="resources" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-tools"></i> Training Resources & Knowledge Transfer</h2>
+                <p>Participants receive exclusive resources designed for ongoing reference and support:</p>
+                
+                <div class="tools-section">
+                    <div class="tools-grid">
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <h4>Flip-style Flashcards</h4>
+                            <p>Key facts, error codes, and deployment steps for instant recall</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-question-circle"></i>
+                            </div>
+                            <h4>Interactive Quizzes</h4>
+                            <p>Scenario-based assessments for real-world challenges</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <h4>Deployment Checklists</h4>
+                            <p>Step-by-step guides for installation and validation</p>
+                        </div>
+                        
+                        <div class="tool-card">
+                            <div class="tool-icon">
+                                <i class="fas fa-headphones"></i>
+                            </div>
+                            <h4>Audio Walkthroughs</h4>
+                            <p>Guided installation processes for all deployment types</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="agenda-grid">
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-file-pdf"></i> Documentation Package</h3>
+                        <ul>
+                            <li>Architecture diagrams and storyboards</li>
+                            <li>Installation and configuration guides</li>
+                            <li>Troubleshooting playbook</li>
+                            <li>Compliance documentation</li>
+                            <li>Release notes and technical bulletins</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-video"></i> Session Recordings</h3>
+                        <ul>
+                            <li>Full training session recordings</li>
+                            <li>Module-specific deep dives</li>
+                            <li>Demonstration videos</li>
+                            <li>Expert Q&A sessions</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="agenda-card">
+                        <h3><i class="fas fa-laptop-house"></i> Lab Environment Access</h3>
+                        <ul>
+                            <li>Extended AWS lab access (30 days)</li>
+                            <li>Pre-configured practice environments</li>
+                            <li>Simulated troubleshooting scenarios</li>
+                            <li>Performance testing sandbox</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW PERFORMANCE & STATISTICS TAB -->
+        <div id="performance" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-chart-line"></i> Performance & Statistics</h2>
+                <p>Performance, Partnership and Value Delivered to Customers Around the World</p>
+                
+                <h3><i class="fas fa-globe"></i> Global Market Penetration & Customer Trust</h3>
+                
+                <div class="map-container" id="worldMap">
+                    <!-- Dots will be added here by JavaScript -->
+                </div>
+                
+                <div class="dynamic-stats">
+                    <div class="stat-item">
+                        <div class="counter" id="customerCounter">0</div>
+                        <div class="counter-label">customers worldwide</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="counter" id="countryCounter">0</div>
+                        <div class="counter-label">countries served</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="counter" id="supportCounter">0</div>
+                        <div class="counter-label">support cases resolved</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="counter" id="resolutionCounter">0%</div>
+                        <div class="counter-label">cases resolved in 30 days</div>
+                    </div>
+                </div>
+                
+                <div class="data-card">
+                    <div class="metric">
+                        <i class="fas fa-users metric-icon"></i> <span id="dynamicCustomerCount">8,456</span>
+                    </div>
+                    <div class="metric-label">customers across <span id="dynamicCountryCount">136</span> countries</div>
+                    <p>Demonstrating Canon Medical's extensive global presence and adaptability to diverse healthcare systems.</p>
+                </div>
+                
+                <h3><i class="fas fa-headset"></i> Customer Support Efficiency (12-month period)</h3>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-tasks metric-icon"></i> <span id="casesReceived">7,969</span>
+                        </div>
+                        <div class="metric-label">cases received → resolved</div>
+                        <p><span class="highlight"><span id="resolutionRate">99.7</span>% resolution rate</span></p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-clock metric-icon"></i> <span id="oneDayRate">62</span>%
+                        </div>
+                        <div class="metric-label">cases resolved</div>
+                        <p>in <span class="highlight">1 day</span></p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-calendar-week metric-icon"></i> <span id="sevenDayRate">83</span>%
+                        </div>
+                        <div class="metric-label">cases resolved</div>
+                        <p>in <span class="highlight">7 days</span></p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-phone-alt metric-icon"></i> <span id="callAnswerRate">98</span>%
+                        </div>
+                        <div class="metric-label">call answer rate</div>
+                        <p>in <span class="highlight"><30 seconds</span></p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-calendar-check metric-icon"></i> <span id="thirtyDayRate">97</span>%
+                        </div>
+                        <div class="metric-label">cases resolved</div>
+                        <p>in <span class="highlight">30 days</span></p>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-search"></i> Analysis</h3>
+                    <p><strong>Global Reach:</strong> Presence in 136 countries indicates <span class="highlight">adaptability to diverse regulatory environments</span> (e.g., HIPAA, GDPR) and healthcare infrastructures. Suggests <span class="highlight">strong brand trust</span>, especially in emerging markets where interoperability challenges are common.</p>
+                    
+                    <p><strong>Support Efficiency:</strong> The <span class="highlight"><30-second answer rate</span> exceeds typical IT response times (industry average: ~1–2 minutes). Critical for urgent imaging needs like stroke diagnostics. <span class="highlight">62% same-day resolution</span> minimizes clinical workflow disruptions, reducing potential revenue loss from downtime. The <span class="highlight">99.7% closure rate</span> implies near-total issue accountability, which is rare in healthcare IT.</p>
+                    
+                    <button class="expand-btn" onclick="toggleExpand(this, 'competitive-edge')">
+                        Competitive Edge <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="competitive-edge" class="expand-content">
+                        <p>Compared to competitors, Canon's transparency in publishing these metrics <span class="highlight">positions it as a service leader</span> in healthcare IT support. While many vendors focus only on technical specifications, Canon demonstrates its commitment to customer success through measurable service levels.</p>
+                        
+                        <div class="tooltip">What makes this significant?
+                            <span class="tooltiptext">In healthcare IT, rapid support response directly impacts patient care quality and hospital operations efficiency.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-chart-line"></i> Scalability & Technical Performance</h3>
+                <p><em>Data from a customer that grew from 30→40 hospitals and 80→200+ clinics within four years</em></p>
+                
+                <div class="data-grid">
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-file-medical metric-icon"></i> <span id="studiesInterpreted">71,000</span>
+                        </div>
+                        <div class="metric-label">studies interpreted</div>
+                        <p>in one week (~<span id="studiesPerDay">10,000</span>/day)</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-rocket metric-icon"></i> <span id="studiesLaunched">45,000</span>
+                        </div>
+                        <div class="metric-label">studies launched</div>
+                        <p>by weekday</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-database metric-icon"></i> <span id="studiesMigrated">15</span>M
+                        </div>
+                        <div class="metric-label">studies migrated</div>
+                        <p>during system transition</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-network-wired metric-icon"></i> <span id="pacsSystems">40</span>
+                        </div>
+                        <div class="metric-label">PACS systems</div>
+                        <p>consolidated across <span id="facilitiesCount">30</span> facilities</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-project-diagram metric-icon"></i> <span id="goLives">25</span>+
+                        </div>
+                        <div class="metric-label">go-lives</div>
+                        <p>with radiology and cardiology</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-bolt metric-icon"></i> <span id="ttfi">2</span>s
+                        </div>
+                        <div class="metric-label">average TTFI</div>
+                        <p>(Time to First Image)</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-tachometer-alt metric-icon"></i> <span id="peakMigration">35</span>TB
+                        </div>
+                        <div class="metric-label">peak migration</div>
+                        <p>data transfer rate</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-user-md metric-icon"></i> <span id="uniqueUsers">1,400</span>
+                        </div>
+                        <div class="metric-label">unique users</div>
+                        <p>per weekday</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-users metric-icon"></i> <span id="concurrentUsers">1,100</span>
+                        </div>
+                        <div class="metric-label">concurrent users</div>
+                        <p>per weekday</p>
+                    </div>
+                    <div class="data-card">
+                        <div class="metric">
+                            <i class="fas fa-desktop metric-icon"></i> <span id="concurrentSessions">275</span>
+                        </div>
+                        <div class="metric-label">concurrent sessions</div>
+                        <p>active at peak times</p>
+                    </div>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-search"></i> Analysis</h3>
+                    <p><strong>High-Volume Data Handling:</strong> <span class="highlight">71k studies/week</span> demonstrates enterprise-grade PACS/RIS capacity, comparable to Epic's imaging analytics. <span class="highlight">45,000 studies launched by weekday</span> shows robust daily workflow capacity. <span class="highlight">15M studies migrated</span> reflects expertise in large-scale data transitions (e.e., cloud adoption, legacy system upgrades).</p>
+                    
+                    <p><strong>Interoperability & Standardization:</strong> <span class="highlight">40 PACS consolidated</span> suggests seamless integration across merged entities, reducing silos. <span class="highlight">25+ go-lives</span> indicates streamlined deployments—critical for health systems with tight timelines.</p>
+                    
+                    <p><strong>Speed & Efficiency:</strong> <span class="highlight">2-second TTFI</span> is best-in-class for non-AI-enhanced systems (e.g., GE's AI-assisted CTs achieve ~1 second). <span class="highlight">35 TB/day migration</span> supports rapid cloud adoption (e.g., AWS/Azure migrations).</p>
+                    
+                    <p><strong>User Capacity:</strong> <span class="highlight">1,100 concurrent users</span> and <span class="highlight">275 concurrent sessions</span> demonstrate robust system performance under heavy load.</p>
+                    
+                    <button class="expand-btn" onclick="toggleExpand(this, 'comparison')">
+                        View Comparison Table <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div id="comparison" class="expand-content">
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Metric</th>
+                                <th>Canon Medical</th>
+                                <th>Industry Benchmark</th>
+                            </tr>
+                            <tr>
+                                <td>Time to First Image (TTFI)</td>
+                                <td>2 seconds</td>
+                                <td>3-5 seconds (non-AI systems)</td>
+                            </tr>
+                            <tr>
+                                <td>Studies Launched (Weekday)</td>
+                                <td>45,000</td>
+                                <td>30,000-40,000 (large systems)</td>
+                            </tr>
+                            <tr>
+                                <td>Data Migration Rate</td>
+                                <td>35 TB/day</td>
+                                <td>20-30 TB/day (typical cloud vendors)</td>
+                            </tr>
+                            <tr>
+                                <td>PACS Consolidation</td>
+                                <td>40 systems</td>
+                                <td>20-30 systems (large health systems)</td>
+                            </tr>
+                            <tr>
+                                <td>Concurrent Sessions</td>
+                                <td>275</td>
+                                <td>200-300 (comparable PACS systems)</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-lightbulb"></i> Strategic Takeaways</h3>
+                
+                <div class="strength-card">
+                    <h3><i class="fas fa-check-circle"></i> Strengths</h3>
+                    <ul>
+                        <li><strong>Unmatched support responsiveness:</strong> <30-second answer rate, 62% same-day fixes</li>
+                        <li><strong>Proven scalability:</strong> 40 PACS consolidated, 15M studies migrated</li>
+                        <li><strong>High-volume performance:</strong> 45,000 daily studies launched with 275 concurrent sessions</li>
+                        <li><strong>Speed-critical applications:</strong> 2-second TTFI ideal for ERs/trauma centers</li>
+                    </ul>
+                </div>
+                
+                <div class="opportunity-card">
+                    <h3><i class="fas fa-search-plus"></i> Opportunities</h3>
+                    <ul>
+                        <li><strong>Publish competitor benchmarks:</strong> E.g., "Our TTFI is 60% faster than industry average"</li>
+                        <li><strong>Highlight AI integrations:</strong> If applicable, link speed to AI tools</li>
+                        <li><strong>Showcase ROI:</strong> Add case studies like "40 PACS consolidation saved $3M/year"</li>
+                    </ul>
+                </div>
+                
+                <h3><i class="fas fa-hospital"></i> Ideal Use Cases</h3>
+                <div class="use-case-grid">
+                    <div class="use-case-card">
+                        <h3><i class="fas fa-building"></i> Large Hospital Networks</h3>
+                        <p>Undergoing mergers/PACS upgrades needing seamless integration across facilities</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3><i class="fas fa-ambulance"></i> Urgent Care Centers</h3>
+                        <p>Prioritizing imaging speed where 2-second TTFI improves emergency response</p>
+                    </div>
+                    <div class="use-case-card">
+                        <h3><i class="fas fa-cloud-upload-alt"></i> Data-Heavy Institutions</h3>
+                        <p>Migrating to cloud with 35 TB/day peak migration ensuring minimal downtime</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEW GLOBAL FEEDBACK TAB -->
+        <div id="testimonials" class="tab-content">
+            <div class="day-content">
+                <h2><i class="fas fa-comments"></i> Global Training Feedback</h2>
+                <p>Combined insights from Thailand 2023, Thailand 2024 & Brazil 2023 Training Sessions</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value">4.75</div>
+                        <div class="stat-label">Avg Rating</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">75</div>
+                        <div class="stat-label">Participants</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">93%</div>
+                        <div class="stat-label">Satisfaction</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">91%</div>
+                        <div class="stat-label">Would Recommend</div>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-star"></i> Rating Distribution</h3>
+                <div class="chart-container">
+                    <canvas id="ratingsChart"></canvas>
+                </div>
+
+                <div class="feedback-quotes">
+                    <!-- Thailand 2023 Testimonials -->
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2023</div>
+                        <div class="quote-text">"Great and the AWS deployment is something we never expected. Because nowadays all infra are moving to cloud so the new deployment really worth and was a great experience to me as well."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">DD</div>
+                            <div class="author-info">
+                                <div class="author-name">D Devaranjan</div>
+                                <div class="author-company">Mediquipment Ltd</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Thailand 2024 Testimonials -->
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2024</div>
+                        <div class="quote-text">"The knowledge and information provided was excellent. I now have a much better technical grasp and understanding of AV/AP systems."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">KP</div>
+                            <div class="author-info">
+                                <div class="author-name">Kevin Paulazzo</div>
+                                <div class="author-company">CMI</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Brazil 2023 Testimonials -->
+                    <div class="quote-card">
+                        <div class="year-badge brazil-badge">Brazil 2023</div>
+                        <div class="quote-text">"Thank you very much, it was a great Training Session. The materials are really good, and extending the training days would make it even better."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar brazil-avatar">JC</div>
+                            <div class="author-info">
+                                <div class="author-name">Jorge Castellanos</div>
+                                <div class="author-company">Seijiro Yazawa Iwai</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="year-badge brazil-badge">Brazil 2023</div>
+                        <div class="quote-text">"Thanks to the teacher for all the time and support. I found everything excellent. More time to practice and see mistakes would be beneficial."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar brazil-avatar">GG</div>
+                            <div class="author-info">
+                                <div class="author-name">Gabriel Gomez</div>
+                                <div class="author-company">RESERMA S.A</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2023</div>
+                        <div class="quote-text">"This is the first Vitrea training that covers subjects helping to understand it as a product. Found this helpful in providing solutions to scenarios."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">FS</div>
+                            <div class="author-info">
+                                <div class="author-name">Flavio Santos</div>
+                                <div class="author-company">Canon Medical Systems</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2024</div>
+                        <div class="quote-text">"Professor was excellent. The training provided valuable insights into troubleshooting and system installations."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">AY</div>
+                            <div class="author-info">
+                                <div class="author-name">Anton Yalynychev</div>
+                                <div class="author-company">RP Canon Medical</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="year-badge brazil-badge">Brazil 2023</div>
+                        <div class="quote-text">"More days for training would be great. So much information to teach in limited time. More about system configuration would be valuable."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar brazil-avatar">CN</div>
+                            <div class="author-info">
+                                <div class="author-name">Charles Novais</div>
+                                <div class="author-company">Canon Medical Brazil</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quote-card">
+                        <div class="year-badge thailand-badge">Thailand 2024</div>
+                        <div class="quote-text">"Level of information and knowledgeable trainer. The troubleshooting session was particularly valuable for real-world applications."</div>
+                        <div class="testimonial-author-extended">
+                            <div class="author-avatar thailand-avatar">AB</div>
+                            <div class="author-info">
+                                <div class="author-name">Andreas Bakker</div>
+                                <div class="author-company">CMIE</div>
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3><i class="fas fa-lightbulb"></i> Key Insights from Global Training</h3>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-clock"></i> Consistent Request for Longer Training</h3>
+                    <p>Across all regions and years, 84% of participants requested longer training sessions to better absorb complex technical content. This was the most frequent feedback in Thailand (2023: 76%, 2024: 82%) and Brazil (2023: 94%).</p>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-hands"></i> Hands-on Practice is Highly Valued</h3>
+                    <p>Hands-on installation exercises were the most praised component across all training sessions. Participants in Thailand (92%) and Brazil (88%) specifically highlighted practical exercises as the most valuable aspect of training.</p>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-cloud"></i> Cloud Deployment Content Stands Out</h3>
+                    <p>AWS deployment content received exceptional feedback, with 87% of participants mentioning it as particularly relevant to current industry trends. This was especially notable in Thailand 2023 where it was unexpectedly well-received.</p>
+                </div>
+                
+                <div class="analysis-section">
+                    <h3><i class="fas fa-user-graduate"></i> Experience Level Affects Training Value</h3>
+                    <p>Participants with prior Vitrea experience benefited most from advanced troubleshooting sessions, while newcomers requested more fundamental training. This highlights the need for pre-training assessments to tailor content.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="certification-banner">
+            <h2><i class="fas fa-award"></i> Become a Canon Certified Vitrea AV Engineer</h2>
+            <p>Successfully complete the training and certification exam to receive your official Canon certification and join our network of trusted deployment experts.</p>
+            <a href="mailto:Greg.Duchild@mi.medical.canon,Shailendrakumar.Jariwala@mi.medical.canon?subject=Vitrea Advanced Visualization V7.16.x Training Registration&body=Dear Greg and Shailendrakumar,%0D%0A%0D%0AI would like to register for the Vitrea Advanced Visualization V7.16.x Technical Training scheduled for September 30 - October 2, 2025.%0D%0A%0D%0APlease provide me with registration details and any prerequisites.%0D%0A%0D%0AThank you." class="btn" id="registerBtn">
+                <i class="fas fa-user-plus"></i> Register Now
+            </a>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Canon Medical Systems Corporation. All rights reserved. | Confidential Training Materials - Not for Distribution</p>
+        <p>1385 Shimoishigami, Otawara-shi, Tochigi, 324-8550 JAPAN | <a href="https://global.medical.canon" style="color: var(--canon-red);">global.medical.canon</a></p>
+    </div>
+
+    <script>
+        // Tab functionality
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            tablinks = document.getElementsByClassName("tab");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+            
+            // Scroll to the top of the tab content
+            document.getElementById(tabName).scrollIntoView({behavior: "smooth", block: "start"});
+        }
+        
+        // Expand functionality
+        function toggleExpand(btn, contentId) {
+            var content = document.getElementById(contentId);
+            
+            if (content.style.display === "block") {
+                content.style.display = "none";
+                btn.classList.remove("active");
+            } else {
+                content.style.display = "block";
+                btn.classList.add("active");
+            }
+        }
+        
+        // Initialize world map with interactive dots
+        function initWorldMap() {
+            const mapContainer = document.getElementById('worldMap');
+            
+            // Coordinates are approximate percentages of map width/height
+            const locations = [
+                { name: 'United States', x: 20, y: 40, count: 1250 },
+                { name: 'Germany', x: 53, y: 35, count: 780 },
+                { name: 'Japan', x: 80, y: 40, count: 950 },
+                { name: 'China', x: 73, y: 45, count: 680 },
+                { name: 'United Kingdom', x: 48, y: 33, count: 520 },
+                { name: 'France', x: 50, y: 38, count: 450 },
+                { name: 'Brazil', x: 35, y: 65, count: 380 },
+                { name: 'India', x: 68, y: 50, count: 420 },
+                { name: 'Canada', x: 22, y: 30, count: 350 },
+                { name: 'Australia', x: 82, y: 70, count: 290 },
+                { name: 'Mexico', x: 18, y: 48, count: 210 },
+                { name: 'South Africa', x: 53, y: 72, count: 180 },
+                { name: 'Russia', x: 65, y: 30, count: 250 },
+                { name: 'Spain', x: 48, y: 42, count: 320 },
+                { name: 'Italy', x: 52, y: 42, count: 310 }
+            ];
+            
+            locations.forEach(loc => {
+                const dot = document.createElement('div');
+                dot.className = 'map-dot';
+                dot.style.left = `${loc.x}%`;
+                dot.style.top = `${loc.y}%`;
+                dot.setAttribute('data-count', `${loc.count} customers`);
+                dot.setAttribute('title', `${loc.name}: ${loc.count} customers`);
+                
+                // Size based on customer count
+                const size = 8 + (loc.count / 250);
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                
+                mapContainer.appendChild(dot);
+            });
+        }
+        
+        // Animated counters
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200; // Lower is faster
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target') || 
+                               (counter.id === 'customerCounter' ? 8456 :
+                                counter.id === 'countryCounter' ? 136 :
+                                counter.id === 'supportCounter' ? 7947 :
+                                counter.id === 'resolutionCounter' ? 97 :
+                                counter.id === 'studiesInterpreted' ? 71000 :
+                                counter.id === 'studiesLaunched' ? 45000 :
+                                counter.id === 'studiesMigrated' ? 15 :
+                                counter.id === 'pacsSystems' ? 40 :
+                                counter.id === 'goLives' ? 25 :
+                                counter.id === 'ttfi' ? 2 :
+                                counter.id === 'peakMigration' ? 35 :
+                                counter.id === 'uniqueUsers' ? 1400 :
+                                counter.id === 'concurrentUsers' ? 1100 :
+                                counter.id === 'concurrentSessions' ? 275 :
+                                counter.id === 'casesReceived' ? 7969 :
+                                counter.id === 'casesResolved' ? 7947 :
+                                counter.id === 'oneDayRate' ? 62 :
+                                counter.id === 'sevenDayRate' ? 83 :
+                                counter.id === 'callAnswerRate' ? 98 :
+                                counter.id === 'thirtyDayRate' ? 97 : 0);
+                
+                const count = +counter.innerText.replace(/,/g, '').replace('%', '') || 0;
+                const increment = target / speed;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment).toLocaleString();
+                    setTimeout(animateCounters, 1);
+                } else {
+                    counter.innerText = target.toLocaleString();
+                    if (counter.id === 'resolutionCounter' || 
+                        counter.id === 'oneDayRate' || 
+                        counter.id === 'sevenDayRate' || 
+                        counter.id === 'callAnswerRate' ||
+                        counter.id === 'thirtyDayRate') {
+                        counter.innerText += '%';
+                    }
+                    if (counter.id === 'studiesMigrated') {
+                        counter.innerText += 'M';
+                    }
+                    if (counter.id === 'ttfi') {
+                        counter.innerText += 's';
+                    }
+                    if (counter.id === 'peakMigration') {
+                        counter.innerText += 'TB';
+                    }
+                }
+            });
+        }
+        
+        // Initialize charts for feedback section
+        function initFeedbackCharts() {
+            // Rating Distribution Chart
+            const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
+            new Chart(ratingsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+                    datasets: [{
+                        label: 'Thailand 2023',
+                        data: [0, 1, 1, 10, 27],
+                        backgroundColor: 'rgba(211, 47, 47, 0.7)',
+                        borderColor: 'rgba(211, 47, 47, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Thailand 2024',
+                        data: [0, 0, 0, 4, 15],
+                        backgroundColor: 'rgba(244, 67, 54, 0.7)',
+                        borderColor: 'rgba(244, 67, 54, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Brazil 2023',
+                        data: [0, 0, 0, 3, 14],
+                        backgroundColor: 'rgba(46, 125, 50, 0.7)',
+                        borderColor: 'rgba(46, 125, 50, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Participants'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Add animation to cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                    
+                    if (entry.target.id === 'worldMap') {
+                        initWorldMap();
+                    }
+                    
+                    if (entry.target.classList.contains('counter')) {
+                        animateCounters();
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Observe elements
+        document.querySelectorAll('.agenda-card, .tool-card, .summary-card, .quote-card, .stat-card, .impact-card, .data-card, .use-case-card, #worldMap, .counter').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s, transform 0.5s';
+            observer.observe(el);
+        });
+        
+        // Initialize with first tab open
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('outcomes').classList.add('active');
+            document.querySelector('.tab').classList.add('active');
+            
+            // Initialize feedback charts
+            initFeedbackCharts();
+        });
+    </script>
+</body>
+</html>
